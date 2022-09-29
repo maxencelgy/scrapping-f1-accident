@@ -46,19 +46,26 @@ class HomeController extends Controller
             $singlePage = $client->request('GET', $urlSingle);
 
             $singlePage->filter('.resultsarchive-wrapper')->each(function (Crawler $el) {
-                dump($el->filter('.ResultsArchiveTitle')->text());
-//                dump($el->filter('.dark')->text());
-                dump($el->filter('tbody .hide-for-tablet')->text());
-//                dump($el->filter('tbody .hide-for-desktop')->text());
+//                dump($el->filter('.ResultsArchiveTitle')->text());
+////                dump($el->filter('.dark')->text());
+//                dump($el->filter('tbody .hide-for-tablet')->text());
+////                dump($el->filter('tbody .hide-for-desktop')->text());
+
+
+
+//
+                dump($el->filter('.dark')->text());
+
+
+                $this->result[] = [
+                    'title' => $el->filter('.ResultsArchiveTitle')->text(),
+                    'winner' => $el->filter('tbody .hide-for-tablet')->text() . ' ' . $el->filter('tbody span.hide-for-mobile')->text(),
+                    'out' => $el->filter('tbody .hide-for-desktop')->text(),
+                ];
 
                 });
-
-
-            $this->url[] = [
-                $urlSingle
-            ];
         });
-
+        dump($this->result);
 
 //        dump($this->url);
         return view('home.index', [
