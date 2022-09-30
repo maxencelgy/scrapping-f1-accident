@@ -10,10 +10,11 @@ use Symfony\Component\DomCrawler\Crawler;
 class HomeController extends Controller
 {
     private $result = array();
-    private $url = array();
+    private $drivers = array();
 
     public function index()
     {
+        //RESULTAT
         $client = new Client();
         $url = 'https://www.formula1.com/en/results.html';
         $page = $client->request('GET', $url);
@@ -23,23 +24,42 @@ class HomeController extends Controller
 
             $singlePage->filter('.resultsarchive-wrapper')->each(function (Crawler $el) {
                 $this->result[] = [
-                    'title' => $el->filter('.ResultsArchiveTitle')->text(),
+                    'title' => $el->filter('.circuit-info')->text(),
                     'winner' => $el->filter('tbody tr td:nth-child(4)')->text(),
                     'temps' => $el->filter('tbody tr td:nth-child(7)')->text(),
                     'all' => $el->filter('tbody tr')->each(function ($node) {
                         return [
+                            'position' => $node->filter('td:nth-child(2)')->text(),
                             'name' => $node->filter('td:nth-child(4)')->text(),
                             'temps' => $node->filter('td:nth-child(7)')->text(),
                         ];
                     })
                 ];
-
             });
         });
-        dump($this->result);
+        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ///
+        ///  DRIVERS
+        ///
+        /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        $url = 'https://www.formula1.com/en/results.html/2022/drivers.html';
+        $page = $client->request('GET', $url);
+        $page->filter('tbody tr')->each(function ($node) {
+            $this->drivers[] = [
+                'id' => $node->filter('td:nth-child(2)')->text(),
+                'name' => $node->filter('td:nth-child(3)')->text(),
+                'car' => $node->filter('td:nth-child(5)')->text(),
+                'points' => $node->filter('td:nth-child(6)')->text(),
+            ];
+        });
+
+
 
         return view('home.index', [
-            'user' => 'cc',
+            'courses' => $this->result,
+            'drivers' => $this->drivers,
         ]);
     }
 
