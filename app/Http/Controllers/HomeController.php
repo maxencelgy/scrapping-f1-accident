@@ -14,30 +14,6 @@ class HomeController extends Controller
 
     public function index()
     {
-//        $client = new Client();
-//        for ($i = 1; $i < 9; $i++) {
-//            $url = 'https://www.novacel.world/en/news?page=' . $i;
-//            $page = $client->request('GET', $url);
-//            $page->filter('.card')->each(function ($item) use ($client) {
-//                $urlSingle = $item->attr('href');
-//                $singlePage = $client->request('GET', $urlSingle);
-//
-//                $singlePage->filter('article')->each(function (Crawler $el) {
-//                    if ($el->filter('img')->count()) {
-//                        $image = $el->filter('img')->image()->getUri();
-//                    } else {
-//                        $image = $el->filter('iframe')->attr('src');
-//                    }results
-//                    $this->[] = [
-//                        'image' => $image,
-//                        'title' => $el->filter('h1')->text(),
-//                        'text' => $el->filter('[itemprop="articleBody"]')->html(),
-//                        'date' => $el->filter('time')->attr('datetime'),
-//                    ];
-//                });
-//            });}
-//
-
         $client = new Client();
         $url = 'https://www.formula1.com/en/results.html';
         $page = $client->request('GET', $url);
@@ -46,30 +22,22 @@ class HomeController extends Controller
             $singlePage = $client->request('GET', $urlSingle);
 
             $singlePage->filter('.resultsarchive-wrapper')->each(function (Crawler $el) {
-//                dump($el->filter('.ResultsArchiveTitle')->text());
-////                dump($el->filter('.dark')->text());
-//                dump($el->filter('tbody .hide-for-tablet')->text());
-////                dump($el->filter('tbody .hide-for-desktop')->text());
-
-
-
-//
-                dump($el->filter('.dark.bold')->each(function ($node){
-                    return $node->text();
-                }));
-
-
                 $this->result[] = [
                     'title' => $el->filter('.ResultsArchiveTitle')->text(),
-                    'winner' => $el->filter('tbody .hide-for-tablet')->text() . ' ' . $el->filter('tbody span.hide-for-mobile')->text(),
-                    'out' => $el->filter('tbody .hide-for-desktop')->text(),
+                    'winner' => $el->filter('tbody tr td:nth-child(4)')->text(),
+                    'temps' => $el->filter('tbody tr td:nth-child(7)')->text(),
+                    'all' => $el->filter('tbody tr')->each(function ($node) {
+                        return [
+                            'name' => $node->filter('td:nth-child(4)')->text(),
+                            'temps' => $node->filter('td:nth-child(7)')->text(),
+                        ];
+                    })
                 ];
 
-                });
+            });
         });
         dump($this->result);
 
-//        dump($this->url);
         return view('home.index', [
             'user' => 'cc',
         ]);
