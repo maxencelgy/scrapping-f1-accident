@@ -54,7 +54,9 @@ class HomeController extends Controller
 
 
 //
-                dump($el->filter('.dark')->text());
+                dump($el->filter('.dark.bold')->each(function ($node){
+                    return $node->text();
+                }));
 
 
                 $this->result[] = [
