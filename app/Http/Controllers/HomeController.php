@@ -16,6 +16,8 @@ class HomeController extends Controller
     private $accident = array();
     private $nameCountAccidents = array();
     private $carCountAccidents = array();
+    private $top10 = array();
+    private $top10PlayerCount = array();
 
     public function index()
     {
@@ -96,7 +98,35 @@ class HomeController extends Controller
                 $this->carCountAccidents[$pilotes['car']] = +1;
             };
         }
-//        dd($this->nameCountAccidents);
+
+//        TOP 10 LE PLUS PROBABLE
+        foreach ($this->result as $key => $course) {
+            $this->top10[$course['title']] = [
+                1 => $course['all'][0]['name'],
+                2 => $course['all'][1]['name'],
+                3 => $course['all'][2]['name'],
+                4 => $course['all'][3]['name'],
+                5 => $course['all'][4]['name'],
+                6 => $course['all'][5]['name'],
+                7 => $course['all'][6]['name'],
+                8 => $course['all'][7]['name'],
+                9 => $course['all'][8]['name'],
+                10 => $course['all'][9]['name'],
+            ];
+        }
+
+
+        foreach ($this->top10 as $el => $top) {
+            foreach ($top as $key => $value) {
+                if (!empty($this->top10PlayerCount[$value])) {
+                    $this->top10PlayerCount[$value] = $this->top10PlayerCount[$value] + 1;
+                } else {
+                    $this->top10PlayerCount[$value] = +1;
+                };
+            };
+        }
+
+//        dd($this->top10PlayerCount);
 
         return view('home.index', [
             'courses' => $this->result,
@@ -104,72 +134,7 @@ class HomeController extends Controller
             'drivers' => $this->drivers,
             'accidents' => $this->nameCountAccidents,
             'carAccidents' => $this->carCountAccidents,
+            'top10' => $this->top10PlayerCount,
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }
