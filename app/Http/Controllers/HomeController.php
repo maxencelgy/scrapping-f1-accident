@@ -19,6 +19,7 @@ class HomeController extends Controller
     private $top10 = array();
     private $top10PlayerCount = array();
     private $top10PlayerPourcent = array();
+    private $safe = array();
 
     public function index()
     {
@@ -147,8 +148,20 @@ class HomeController extends Controller
             ];
         }
 
+//        LE SAFE DU JOUR
 
-//        dd($this->top10PlayerPourcent);
+        foreach ($this->top10PlayerPourcent as $key => $value) {
+//            dump($value);
+            if ($value['top10pourcent'] - $value['nbrAccidentPourcent'] > 70) {
+                $this->safe[] = [
+                    'name' => $value['name'],
+                    'pourcentage' => $value['top10pourcent'] - $value['nbrAccidentPourcent'],
+                ];
+            }
+//            $this->safe[$value['name']]['safe'] = $value['top10pourcent'] - $value['nbrAccidentPourcent'];
+        }
+
+//        dd($this->safe);
 
         return view('home.index', [
             'courses' => $this->result,
@@ -158,6 +171,7 @@ class HomeController extends Controller
             'carAccidents' => $this->carCountAccidents,
             'top10' => $this->top10PlayerCount,
             'top10pourcent' => $this->top10PlayerPourcent,
+            'safes' => $this->safe,
         ]);
     }
 }

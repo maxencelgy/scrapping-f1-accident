@@ -9,10 +9,25 @@
     <title>F1 SCRAP</title>
 </head>
 <body class="bg-gray-600 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100">
-<div class="text-center my-[4rem]">
+<div class="text-center my-[6rem]">
     <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Analyse F1</h1>
     <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Les meilleurs stats f1 c'est ici la team go encaisser.</p>
 </div>
+
+<div class="text-center mb-40">
+    <h1 class="mb-[4rem] text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">LE GROS SAFE DE DIMANCHE !
+        <br> TOP 10 :</h1>
+    <div class="flex items-center justify-between" style="width: 60%; margin: 0 auto;">
+        @foreach($safes as $safe)
+        <div class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+            <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $safe['name'] }}</h5>
+            <p class="font-normal text-green-500">{{ $safe['pourcentage'] }} %</p>
+        </div>
+        @endforeach
+    </div>
+
+</div>
+
 
 <div class="flex mb-4 item-center justify-center">
     <div class="shadow-lg w-3/4 rounded-lg overflow-hidden">
