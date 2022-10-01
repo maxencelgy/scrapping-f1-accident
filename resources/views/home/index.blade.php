@@ -21,10 +21,10 @@
         LE GROS SAFE DE DIMANCHE !
         <br> TOP 10 :</h1>
     <div class=""
-         style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; max-width: 1400px; margin: 0 auto;">
+         style="text-align: center; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; max-width: 1400px; margin: 0 auto;">
         @foreach($safes as $safe)
             <div
-                class="block p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                class="block p-6 mr-4 mb-4 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $safe['name'] }}</h5>
 
                 @if($safe['pourcentage'] > 50)
@@ -43,10 +43,10 @@
         LE GROS SAFE DE DIMANCHE !
         <br> TOP 10 :</h1>
     <div
-        style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; max-width: 1400px; margin: 0 auto;">
+        style="text-align: center; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; max-width: 1400px; margin: 0 auto;">
         @foreach($topProba as $safe)
             <div
-                class="block mb-4 p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                class="block mb-4 mr-4 p-6 max-w-sm bg-white rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ $safe['name'] }}</h5>
                 @if($safe['pourcentage'] > 49)
                     <p class="font-normal text-green-500">{{ $safe['pourcentage'] }} %</p>
