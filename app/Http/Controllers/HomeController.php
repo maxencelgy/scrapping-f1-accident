@@ -18,6 +18,7 @@ class HomeController extends Controller
     private $carCountAccidents = array();
     private $top10 = array();
     private $top10PlayerCount = array();
+    private $top10PlayerPourcent = array();
 
     public function index()
     {
@@ -126,7 +127,28 @@ class HomeController extends Controller
             };
         }
 
-//        dd($this->top10PlayerCount);
+
+
+        $driverTop = $this->top10PlayerCount;
+
+        foreach ($driverTop as $key => $value) {
+            if(!empty($this->nameCountAccidents[$key])){
+                $nbrAccident =    $this->nameCountAccidents[$key];
+            } else {
+                $nbrAccident =  0;
+            }
+
+            $this->top10PlayerPourcent[] = [
+                'name' => $key,
+                'top10' => $value,
+                'top10pourcent' => $value / count($this->result) * 100,
+                'nbrAccident' => $nbrAccident,
+                'nbrAccidentPourcent' => $nbrAccident / count($this->result) * 100,
+            ];
+        }
+
+
+//        dd($this->top10PlayerPourcent);
 
         return view('home.index', [
             'courses' => $this->result,
@@ -135,6 +157,7 @@ class HomeController extends Controller
             'accidents' => $this->nameCountAccidents,
             'carAccidents' => $this->carCountAccidents,
             'top10' => $this->top10PlayerCount,
+            'top10pourcent' => $this->top10PlayerPourcent,
         ]);
     }
 }

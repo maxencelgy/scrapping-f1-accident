@@ -8,102 +8,117 @@
     @vite('resources/css/app.css')
     <title>F1 SCRAP</title>
 </head>
-<body class="bg-gray-600">
-<div>
-    <a href="/live"
-       class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-pink-500 to-orange-400 group-hover:from-pink-500 group-hover:to-orange-400 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800">
-  <span
-      class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
- Voir la course en live
-  </span>
-    </a>
+<body class="bg-gray-600 scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100">
+<div class="text-center my-[4rem]">
+    <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Analyse F1</h1>
+    <p class="mb-6 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 xl:px-48 dark:text-gray-400">Les meilleurs stats f1 c'est ici la team go encaisser.</p>
 </div>
+
 <div class="flex mb-4 item-center justify-center">
     <div class="shadow-lg w-3/4 rounded-lg overflow-hidden">
         <div class="py-3 px-5 bg-gray-50">Réccurence du top 10 par joueurs</div>
-        <canvas class="p-10 bg-gray-50" id="chartBar"></canvas>
+        <canvas class="p-10 bg-gray-300" id="chartBar"></canvas>
     </div>
 </div>
 
 <div class="p-4 flex item-center">
-    <div class="overflow-x-auto relative mr-4 shadow-md sm:rounded-lg">
-        <h1 class="text-white text-xl mb-4">Tableau des pilotes</h1>
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <div style="max-height: 600px"
+         class=" scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100 overflow-x-auto relative mr-4 shadow-md sm:rounded-lg">
+        <h1 class="bg-gray-50 text-center bold text-black text-xl uppercase">Top 10 & Accident</h1>
+        <table class="w-full overflow-auto text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
             <tr>
                 <th scope="col" class="py-3 px-6  dark:bg-gray-800">
-                    Pos
-                </th>
-                <th scope="col" class="py-3 px-6">
                     Name
                 </th>
+                <th scope="col" class="py-3 px-6">
+                   % Top 10 %
+                </th>
                 <th scope="col" class="py-3 px-6 bg-gray-50 dark:bg-gray-800">
-                    Marque
+                    nbr de Top 10
                 </th>
                 <th scope="col" class="py-3 px-6">
-                    Points
+                    % Accident %
+                </th>
+                <th scope="col" class="py-3 px-6 bg-gray-50 dark:bg-gray-800">
+                    nbr Accident
                 </th>
             </tr>
             </thead>
             <tbody>
-            @foreach($drivers as $driver)
+            @foreach($top10pourcent as $key => $value)
                 <tr>
                     <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
-                        {{ $driver['id'] }}
+                        {{ $value['name'] }}
                     </td>
-                    <td class="py-4 px-6">
-                        {{ $driver['name'] }}
-                    </td>
-                    <td class="py-4 px-6 bg-gray-50 dark:bg-gray-800">
-                        {{ $driver['car'] }}
-                    </td>
-                    @if($driver['points'] > 100)
-                        <td class="py-4 px-6 text-green-500">
-                            {{ $driver['points'] }}
+                    @if($value['top10pourcent'] > 70)
+                        <td class="py-4 px-6 text-green-500 text-center">
+                            {{ $value['top10pourcent'] }} %
                         </td>
                     @else
-                        <td class="py-4 px-6 text-orange-500">
-                            {{ $driver['points'] }}
+                        <td class="py-4 px-6 text-orange-200 text-center">
+                            {{ $value['top10pourcent'] }} %
                         </td>
                     @endif
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
-    <div class="mr-4">
-        <h1 class="text-white text-xl mb-4">Accidents par personne</h1>
-        <table class="w-full text-sm shadow-md text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
-            <tr>
-                <th scope="col" class="py-4 px-6 bg-gray-50 dark:bg-gray-800">Pilotes</th>
-                <th scope="col" class="py-3 px-6">Nbr accidents</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($drivers as $driver)
-                <tr class="border-b border-gray-200 dark:border-gray-700">
-                    <td class="py-4 px-6 bg-gray-800 dark:bg-gray-800">
-                        {{ $driver['name'] }}
+                    <td class="py-4 text-center px-6 bg-gray-50 dark:bg-gray-800">
+                        {{ $value['top10'] }}
                     </td>
-                    @if(isset($accidents[$driver['name']]))
-                        @if($accidents[$driver['name']] > 1)
-                            <td class="py-4 px-6 text-orange-500 text-center">
-                                {{ $accidents[$driver['name']] }}
-                            </td>
-                        @else
-                            <td class="py-4 px-6 text-green-500 text-center">
-                                {{ $accidents[$driver['name']] }}
-                            </td>
-                        @endif
+                    @if($value['nbrAccidentPourcent'] < 10)
+                        <td class="py-4 px-6 text-green-500 text-center">
+                            {{ $value['nbrAccidentPourcent'] }} %
+                        </td>
+                    @else
+                        <td class="py-4 px-6 text-orange-200 text-center">
+                            {{ $value['nbrAccidentPourcent'] }} %
+                        </td>
                     @endif
+
+                    <td class="py-4 text-center px-6 bg-gray-50 dark:bg-gray-800">
+                        {{ $value['nbrAccident'] }}
+
+                    </td>
                 </tr>
             @endforeach
             </tbody>
         </table>
     </div>
-    <div class="mr-4">
-        <h1 class="text-white text-xl mb-4">Accidents par marque</h1>
+    <div class="mr-4 overflow-auto scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100 sm:rounded-lg"
+         style="max-height: 600px">
+        <h1 class="bg-gray-50 text-center bold text-black text-xl uppercase">Accidents par personne</h1>
+        <div class="">
+            <table class="w-full text-sm shadow-md text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="py-4 px-6 bg-gray-50 dark:bg-gray-800">Pilotes</th>
+                    <th scope="col" class="py-3 px-6">Nbr accidents</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($drivers as $driver)
+                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                        <td class="py-4 px-6 bg-gray-800 dark:bg-gray-800">
+                            {{ $driver['name'] }}
+                        </td>
+                        @if(isset($accidents[$driver['name']]))
+                            @if($accidents[$driver['name']] > 1)
+                                <td class="py-4 px-6 text-orange-200 text-center">
+                                    {{ $accidents[$driver['name']] }}
+                                </td>
+                            @else
+                                <td class="py-4 px-6 text-green-500 text-center">
+                                    {{ $accidents[$driver['name']] }}
+                                </td>
+                            @endif
+                        @endif
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="mr-4 overflow-auto scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100 sm:rounded-lg"
+         style="max-height: 600px">
+        <h1 class="bg-gray-50 text-center bold text-black text-xl uppercase">Accidents par marque</h1>
         <table class="w-full text-sm shadow-md text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
             <tr>
@@ -119,7 +134,7 @@
                     </td>
                     @if(isset($carAccidents[$marque['name']]))
                         @if($carAccidents[$marque['name']] > 1)
-                            <td class="py-4 px-6 text-orange-500 text-center">
+                            <td class="py-4 px-6 text-orange-200 text-center">
                                 {{ $carAccidents[$marque['name']] }}
                             </td>
                         @else
@@ -133,65 +148,119 @@
             </tbody>
         </table>
     </div>
-    <div>
-        <div><h1 class="text-white text-xl mb-4">Pilote qui a fais le plus d'accident : <br>
-                <span>{{ array_search(max($accidents),$accidents) }}</span> -> <span
-                    class="text-red-500">{{ max($accidents) }}</span></h1></div>
-        <br>
-        <div><h1 class="text-white text-xl mb-4">Marque qui a fais le plus d'accident : <br>
-                <span>{{ array_search(max($carAccidents),$carAccidents) }}</span> -> <span
-                    class="text-red-500">{{ max($carAccidents) }}</span></h1></div>
-    </div>
 </div>
-<div class="p-4">
-    <h1 class="text-white text-xl mb-4">Liste des courses de la saison 2022</h1>
-    <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="py-3 px-6">Course</th>
-                @for($i = 1; $i <= 20; $i++)
-                    <th scope="col" class="py-3 px-6">
-                        {{ $i }}
-                    </th>
-                @endfor
-            </tr>
-            </thead>
-            <tbody>
-            @foreach($courses as $key => $course)
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {{ $course['title'] }}
-                    </th>
-                    @foreach($course['all'] as $player)
+{{--<div class="flex justify-betwen  item-center w-2/4" style="margin: 0 auto;">--}}
+{{--    <div class="mr-8">--}}
+{{--        <h1 class="text-white text-xl mb-4">Pilote qui a fais le plus d'accident : <br>--}}
+{{--            <span>{{ array_search(max($accidents),$accidents) }}</span> -> <span--}}
+{{--                class="text-red-500">{{ max($accidents) }}</span></h1>--}}
+{{--    </div>--}}
+{{--    <div>--}}
+{{--        <h1 class="text-white text-xl mb-4">Marque qui a fais le plus d'accident : <br>--}}
+{{--            <span>{{ array_search(max($carAccidents),$carAccidents) }}</span> -> <span--}}
+{{--                class="text-red-500">{{ max($carAccidents) }}</span></h1></div>--}}
+{{--</div>--}}
 
-                        {{--                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">--}}
-                        {{--                            {{ $player['position'] }}--}}
-                        {{--                        </th>--}}
+<div class="text-center my-[4rem]">
+    <h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">Stats general</h1>
+
+</div>
+
+<div class="flex item-center justify-beteween p-4">
+    <div class="w-1/4 mr-4 overflow-auto scrollbar sm:rounded-lg scrollbar-thumb-gray-900 scrollbar-track-gray-100" style="height: 600px">
+            <h1 class="bg-gray-50 text-center bold text-black text-xl uppercase">Tableau des pilotes</h1>
+            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="py-3 px-6  dark:bg-gray-800">
+                        Pos
+                    </th>
+                    <th scope="col" class="py-3 px-6">
+                        Name
+                    </th>
+                    <th scope="col" class="py-3 px-6 bg-gray-50 dark:bg-gray-800">
+                        Marque
+                    </th>
+                    <th scope="col" class="py-3 px-6">
+                        Points
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($drivers as $driver)
+                    <tr>
+                        <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
+                            {{ $driver['id'] }}
+                        </td>
                         <td class="py-4 px-6">
-                            {{ $player['name'] }}
-                            <br>
-                            @if($player['temps'] != 'DNF')
-                                <span class="text-green-500">
+                            {{ $driver['name'] }}
+                        </td>
+                        <td class="py-4 px-6 bg-gray-50 dark:bg-gray-800">
+                            {{ $driver['car'] }}
+                        </td>
+                        @if($driver['points'] > 100)
+                            <td class="py-4 px-6 text-green-500">
+                                {{ $driver['points'] }}
+                            </td>
+                        @else
+                            <td class="py-4 px-6 text-orange-500">
+                                {{ $driver['points'] }}
+                            </td>
+                        @endif
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+    </div>
+    <div class="w-3/4 overflow-auto relative overflow-auto scrollbar sm:rounded-lg scrollbar-thumb-gray-900 scrollbar-track-gray-100" style="height: 600px">
+            <h1 class="bg-gray-50 w-full text-center bold text-black text-xl uppercase">Liste des courses de la saison 2022</h1>
+            <table class="text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="py-3 px-6">Course</th>
+                    @for($i = 1; $i <= 20; $i++)
+                        <th scope="col" class="py-3 px-6">
+                            {{ $i }}
+                        </th>
+                    @endfor
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($courses as $key => $course)
+                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ $course['title'] }}
+                        </th>
+                        @foreach($course['all'] as $player)
+
+                            {{--                        <th scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">--}}
+                            {{--                            {{ $player['position'] }}--}}
+                            {{--                        </th>--}}
+                            <td class="py-4 px-6">
+                                {{ $player['name'] }}
+                                <br>
+                                @if($player['temps'] != 'DNF')
+                                    <span class="text-green-500">
                                 {{ $player['temps'] }}
                             </span>
-                            @else
-                                <span class="text-red-500">
+                                @else
+                                    <span class="text-red-500">
                                 {{ $player['temps'] }}
                         </span>
-                            @endif
-                        </td>
+                                @endif
+                            </td>
 
 
 
 
-                    @endforeach
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+                        @endforeach
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
     </div>
 </div>
+
 
 
 <!-- Required chart.js -->
@@ -199,8 +268,8 @@
 <!-- Chart bar -->
 <script>
     const labelsBarChart = [
-        @foreach($top10 as $top)
-              '{{ array_search($top, $top10)  }}',
+        @foreach($top10 as $key => $top)
+            '{{ $key  }}',
         @endforeach
     ];
 
