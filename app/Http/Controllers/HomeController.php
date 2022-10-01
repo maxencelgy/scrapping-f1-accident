@@ -10,7 +10,12 @@ use Symfony\Component\DomCrawler\Crawler;
 class HomeController extends Controller
 {
     private $result = array();
+    private $circuit;
     private $drivers = array();
+    private $marques = array();
+    private $accident = array();
+    private $nameCountAccidents = array();
+    private $carCountAccidents = array();
 
     public function index()
     {
@@ -23,13 +28,14 @@ class HomeController extends Controller
             $singlePage = $client->request('GET', $urlSingle);
 
             $singlePage->filter('.resultsarchive-wrapper')->each(function (Crawler $el) {
+                $this->circuit = $el->filter('.circuit-info')->text();
                 $this->result[] = [
-                    'title' => $el->filter('.circuit-info')->text(),
-                    'winner' => $el->filter('tbody tr td:nth-child(4)')->text(),
-                    'temps' => $el->filter('tbody tr td:nth-child(7)')->text(),
+                    'title' => $this->circuit,
                     'all' => $el->filter('tbody tr')->each(function ($node) {
                         return [
+                            'circuit' => $this->circuit,
                             'position' => $node->filter('td:nth-child(2)')->text(),
+                            'car' => $node->filter('td:nth-child(5)')->text(),
                             'name' => $node->filter('td:nth-child(4)')->text(),
                             'temps' => $node->filter('td:nth-child(7)')->text(),
                         ];
@@ -37,12 +43,7 @@ class HomeController extends Controller
                 ];
             });
         });
-        /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ///
-        ///  DRIVERS
-        ///
-        /// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//////////////  DRIVERS
 
         $url = 'https://www.formula1.com/en/results.html/2022/drivers.html';
         $page = $client->request('GET', $url);
@@ -54,12 +55,55 @@ class HomeController extends Controller
                 'points' => $node->filter('td:nth-child(6)')->text(),
             ];
         });
+//      MARQUES
+        $url = 'https://www.formula1.com/en/results.html/2022/team.html';
+        $page = $client->request('GET', $url);
+        $page->filter('tbody tr')->each(function ($node) {
+            $this->marques[] = [
+                'id' => $node->filter('td:nth-child(2)')->text(),
+                'name' => $node->filter('td:nth-child(3)')->text(),
+                'points' => $node->filter('td:nth-child(4)')->text(),
+            ];
+        });
 
+//        ADD ACCIDENT AVEC CIRCUIT ET NOM DU PILOTE
+        foreach ($this->result as $key => $value) {
+            foreach ($value['all'] as $player) {
+                if ($player['temps'] == 'DNF') {
+                    $this->accident[] = [
+                        'circuits' => $player['circuit'],
+                        'nom' => $player['name'],
+                        'car' => $player['car'],
+                    ];
+                }
+            }
+        }
 
+//     GROUP PILOTE NBR ACCIDENT
+        foreach ($this->accident as $el => $pilotes) {
+            if (!empty($this->nameCountAccidents[$pilotes['nom']])) {
+                $this->nameCountAccidents[$pilotes['nom']] = $this->nameCountAccidents[$pilotes['nom']] + 1;
+            } else {
+                $this->nameCountAccidents[$pilotes['nom']] = +1;
+            };
+        }
+
+//     GROUP MARQUES NBR ACCIDENT
+        foreach ($this->accident as $el => $pilotes) {
+            if (!empty($this->carCountAccidents[$pilotes['car']])) {
+                $this->carCountAccidents[$pilotes['car']] = $this->carCountAccidents[$pilotes['car']] + 1;
+            } else {
+                $this->carCountAccidents[$pilotes['car']] = +1;
+            };
+        }
+//        dd($this->nameCountAccidents);
 
         return view('home.index', [
             'courses' => $this->result,
+            'marques' => $this->marques,
             'drivers' => $this->drivers,
+            'accidents' => $this->nameCountAccidents,
+            'carAccidents' => $this->carCountAccidents,
         ]);
     }
 

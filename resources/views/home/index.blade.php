@@ -10,7 +10,7 @@
 </head>
 <body class="bg-gray-600">
 <div class="p-4 flex item-center">
-    <div class="overflow-x-auto  relative mr-4 shadow-md sm:rounded-lg">
+    <div class="overflow-x-auto relative mr-4 shadow-md sm:rounded-lg">
         <h1 class="text-white text-xl mb-4">Tableau des pilotes</h1>
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
@@ -18,10 +18,9 @@
                 <th scope="col" class="py-3 px-6  dark:bg-gray-800">
                     Pos
                 </th>
-                <th scope="col"  class="py-3 px-6">
+                <th scope="col" class="py-3 px-6">
                     Name
                 </th>
-
                 <th scope="col" class="py-3 px-6 bg-gray-50 dark:bg-gray-800">
                     Marque
                 </th>
@@ -32,34 +31,95 @@
             </thead>
             <tbody>
             @foreach($drivers as $driver)
-                <tr class="border-b border-gray-200 dark:border-gray-700">
-                    <td  class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
+                <tr>
+                    <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap bg-gray-50 dark:text-white dark:bg-gray-800">
                         {{ $driver['id'] }}
                     </td>
-                    <td
-                        class="py-4 px-6">
+                    <td class="py-4 px-6">
                         {{ $driver['name'] }}
                     </td>
-
                     <td class="py-4 px-6 bg-gray-50 dark:bg-gray-800">
                         {{ $driver['car'] }}
                     </td>
-                    <td class="py-4 px-6">
+                    @if($driver['points'] > 100)
+                    <td class="py-4 px-6 text-green-500">
                         {{ $driver['points'] }}
                     </td>
+                        @else
+                        <td class="py-4 px-6 text-orange-500">
+                            {{ $driver['points'] }}
+                        </td>
+                        @endif
                 </tr>
             @endforeach
-
             </tbody>
         </table>
     </div>
+    <div class="mr-4">
+        <h1 class="text-white text-xl mb-4">Accidents par personne</h1>
+            <table class="w-full text-sm shadow-md text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="py-4 px-6 bg-gray-50 dark:bg-gray-800">Pilotes</th>
+                    <th scope="col" class="py-3 px-6">Nbr accidents</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($drivers as $driver)
+                    <tr class="border-b border-gray-200 dark:border-gray-700">
+                        <td class="py-4 px-6 bg-gray-800 dark:bg-gray-800">
+                            {{ $driver['name'] }}
+                        </td>
+                        @if(isset($accidents[$driver['name']]))
+                        @if($accidents[$driver['name']] > 1)
+                            <td class="py-4 px-6 text-orange-500 text-center">
+                                    {{ $accidents[$driver['name']] }}
+                            </td>
+                        @else
+                            <td class="py-4 px-6 text-green-500 text-center">
+                                    {{ $accidents[$driver['name']] }}
+                            </td>
+                        @endif
+                        @endif
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+    </div>
     <div>
-        <h1 class="text-white text-xl mb-4">Probabilité du top 10 de dimanche</h1>
+        <h1 class="text-white text-xl mb-4">Accidents par marque</h1>
+        <table class="w-full text-sm shadow-md text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+            <tr>
+                <th scope="col" class="py-4 px-6 bg-gray-50 dark:bg-gray-800">Marques</th>
+                <th scope="col" class="py-3 px-6">Nbr accidents</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach($marques as $marque)
+                <tr class="border-b border-gray-200 dark:border-gray-700">
+                    <td class="py-4 px-6 bg-gray-800 dark:bg-gray-800">
+                        {{ $marque['name'] }}
+                    </td>
+                    @if(isset($carAccidents[$marque['name']]))
+                        @if($carAccidents[$marque['name']] > 1)
+                            <td class="py-4 px-6 text-orange-500 text-center">
+                                {{ $carAccidents[$marque['name']] }}
+                            </td>
+                        @else
+                            <td class="py-4 px-6 text-green-500 text-center">
+                                {{ $carAccidents[$marque['name']] }}
+                            </td>
+                        @endif
+                    @endif
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
     </div>
 </div>
 <div class="p-4">
     <h1 class="text-white text-xl mb-4">Liste des courses de la saison 2022</h1>
-
     <div class="overflow-x-auto relative shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -106,8 +166,6 @@
             </tbody>
         </table>
     </div>
-
-
 </div>
 
 
