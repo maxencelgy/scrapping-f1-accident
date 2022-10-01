@@ -20,6 +20,7 @@ class HomeController extends Controller
     private $top10PlayerCount = array();
     private $top10PlayerPourcent = array();
     private $safe = array();
+    private $topProba = array();
 
     public function index()
     {
@@ -158,10 +159,14 @@ class HomeController extends Controller
                     'pourcentage' => $value['top10pourcent'] - $value['nbrAccidentPourcent'],
                 ];
             }
-//            $this->safe[$value['name']]['safe'] = $value['top10pourcent'] - $value['nbrAccidentPourcent'];
+            $this->topProba[] = [
+                'name' => $value['name'],
+                'pourcentage' => $value['top10pourcent'] - $value['nbrAccidentPourcent'],
+            ];
         }
 
-//        dd($this->safe);
+
+//        dd($this->topProba);
 
         return view('home.index', [
             'courses' => $this->result,
@@ -172,6 +177,7 @@ class HomeController extends Controller
             'top10' => $this->top10PlayerCount,
             'top10pourcent' => $this->top10PlayerPourcent,
             'safes' => $this->safe,
+            'topProba' => $this->topProba,
         ]);
     }
 }
