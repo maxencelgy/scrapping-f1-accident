@@ -143,9 +143,9 @@ class HomeController extends Controller
             $this->top10PlayerPourcent[] = [
                 'name' => $key,
                 'top10' => $value,
-                'top10pourcent' => $value / count($this->result) * 100,
+                'top10pourcent' => intval($value / count($this->result) * 100),
                 'nbrAccident' => $nbrAccident,
-                'nbrAccidentPourcent' => $nbrAccident / count($this->result) * 100,
+                'nbrAccidentPourcent' => intval($nbrAccident / count($this->result) * 100),
             ];
         }
 
@@ -156,12 +156,12 @@ class HomeController extends Controller
             if ($value['top10pourcent'] - $value['nbrAccidentPourcent'] > 70) {
                 $this->safe[] = [
                     'name' => $value['name'],
-                    'pourcentage' => $value['top10pourcent'] - $value['nbrAccidentPourcent'],
+                    'pourcentage' => intval($value['top10pourcent']) - intval($value['nbrAccidentPourcent']),
                 ];
             }
             $this->topProba[] = [
                 'name' => $value['name'],
-                'pourcentage' => $value['top10pourcent'] - $value['nbrAccidentPourcent'],
+                'pourcentage' => intval($value['top10pourcent']) - intval($value['nbrAccidentPourcent']),
             ];
         }
 
