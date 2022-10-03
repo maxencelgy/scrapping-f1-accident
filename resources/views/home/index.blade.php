@@ -164,7 +164,7 @@
     </div>
     <div class="mr-4 overflow-auto scrollbar scrollbar-thumb-gray-900 scrollbar-track-gray-100 sm:rounded-lg"
          style="max-height: 600px">
-        <h1 class="bg-gray-50 text-center bold text-black text-xl uppercase">Accidents par marque</h1>
+        <h1 class="bg-gray-50 text-center bold text-black text-xl uppercase">Accidents par écuries</h1>
         <table class="w-full text-sm shadow-md text-left text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
             <tr>
